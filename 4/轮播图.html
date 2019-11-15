@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .f {
+            position: relative;
+            width: 500px;
+            height: 350px;
+            margin: 120px auto 0;
+            border: 1px solid #000;
+            overflow: hidden;
+        }
+
+        ul {
+            position: relative;
+            top: 50%;
+            /* transition: all 1s; */
+            transform: translateY(-50%);
+            width: 600%;
+            height: 300px;
+        }
+
+        li {
+            float: left;
+            width: 500px;
+            height: 300px;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .list {
+            position: absolute;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+        }
+
+        .list i {
+            float: left;
+            width: 20px;
+            height: 20px;
+            margin: 0 2px;
+            line-height: 20px;
+            text-align: center;
+            border-radius: 50%;
+            background: red;
+        }
+
+        .btn .left {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, .3);
+            text-align: center;
+            line-height: 50px;
+        }
+
+        .btn .right {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, .3);
+            text-align: center;
+            line-height: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="f">
+        <ul>
+            <li><img src="./images/1.jpg" alt=""></li>
+            <li><img src="./images/2.jpg" alt=""></li>
+            <li><img src="./images/3.jpg" alt=""></li>
+            <li><img src="./images/4.jpg" alt=""></li>
+            <li><img src="./images/5.jpg" alt=""></li>
+            <li><img src="./images/6.jpg" alt=""></li>
+        </ul>
+        <div class="list">
+            <i>1</i>
+            <i>2</i>
+            <i>3</i>
+            <i>4</i>
+            <i>5</i>
+            <i>6</i>
+        </div>
+        <div class="btn">
+            <span class="left">&lt;</span>
+            <span class="right">&gt;</span>
+        </div>
+    </div>
+</body>
+<script>
+    function fn() {
+        if (t === 5) {
+            t = -1;
+        }
+        t++;
+        ul.style.left = t * 500 * -1 + 'px';
+    }
+    //自动
+    var ul = document.querySelector('ul');
+    var t = 0;
+    var timer = setInterval(fn, 2000);
+    ul.onmouseover = function () {
+        clearInterval(timer);
+    }
+    ul.onmouseout = function () {
+        timer = setInterval(fn, 2000);
+    }
+
+    //手动按钮
+    var btnl = document.querySelector('.left');
+    var btnr = btnl.nextElementSibling;
+    btnl.addEventListener('click', function () {
+        if (t === 0) {
+            t = 6;
+        }
+        t--;
+        ul.style.left = t * 500 * -1 + 'px';
+    })
+    btnr.addEventListener('click', fn);
+    //圆点
+    var list = document.getElementsByTagName('i');
+    for (let i = 0; i < list.length; i++) {
+        list[i].onmouseover = function () {
+            ul.style.left = i * 500 * -1 + 'px';
+        }
+    }
+</script>
+
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <textarea name="" id="" cols="30" rows="10"></textarea>
+    <input type="button" value="发表">
+    <ul></ul>
+</body>
+
+<script>
+    //时间格式化函数
+    function time() {
+        var date = new Date();
+        var year = date.getFullYear();
+        var mon = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+        var day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+        var h = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+        var m = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+        var s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+        var time = year + '-' + mon + '-' + day + ' ' + h + ':' + m + ':' + s;
+        return time;
+    }
+
+
+    var textarea = document.querySelector('textarea');
+    var btn = textarea.nextElementSibling;
+    var ul = btn.nextElementSibling;
+    var data = localStorage.getItem('item');
+    //获取并转换
+    var arr = !data ? [] : JSON.parse(data);
+    arr.forEach(function (e) {
+        var li = document.createElement('li');
+        li.innerHTML = e.content + ' ' + e.time + ' ' + '<span data-id="' + e.id + '">删除</span>';
+        ul.insertBefore(li, ul.children[0]);
+    });
+
+
+    //发表点击事件
+    btn.onclick = function () {
+        if (textarea.value === '') {
+            return false;
+        }
+
+        var li = document.createElement('li');
+        var id = 0;
+        arr.forEach(function (e) {
+            if (id < e.id) {
+                id = e.id;
+            }
+            id++;
+        });
+        li.innerHTML = textarea.value + ' ' + time() + ' ' + '<span data-id="' + id + '">删除</span>';
+        ul.insertBefore(li, ul.children[0]);
+        //保存数据
+        let obj = {
+            id: id,
+            content: textarea.value,
+            time: time(),
+        }
+        arr.push(obj);
+        var json = JSON.stringify(arr);
+        localStorage.setItem('item', json);
+        textarea.value = '';
+    }
+
+    document.onkeydown = function (e) {
+        if (e.ctrlKey === true && e.keyCode == 13) {
+            btn.onclick();
+        }
+    }
+    //删除
+
+    ul.onclick = function (e) {
+        var span = ul.querySelector('span');
+        var id = e.target.dataset.id;
+        if (e.target.nodeName === 'SPAN') {
+            ul.removeChild(span.parentNode);
+            let data = localStorage.getItem('item');
+            let arr = JSON.parse(data);
+            var j = arr.filter(function (e) {
+                return id != e.id;
+            });
+            j = JSON.stringify(j);
+            localStorage.setItem('item', j);
+        }
+    }
+</script>
+
+</html>
